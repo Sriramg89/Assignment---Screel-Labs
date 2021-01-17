@@ -1,0 +1,320 @@
+<html>
+    <head>
+      <label>&nbsp;</label>
+      <center><h1 style="font-size:50px;">Recruiter Portal<label>&nbsp;</label><i class="med search plus icon"></i></h1></center> 
+      
+      <label>&nbsp;</label> 
+      <label>&nbsp;</label> 
+      <label>&nbsp;</label> <label>&nbsp;</label>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+        <!-- <link rel="stylesheet" href="C:\Users\srira\Downloads\pythonProject\templates\home.css"> -->
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    </head>
+    
+    <body>
+      <div class="ui container">
+        
+        <button id="add_job_post" class="ui blue button">Add Job Post</button>
+        <button id="delete_job_post" class="ui blue button">Delete Job Post</button>
+        <button id="view_jobs_list" class="ui blue button">View Jobs List</button>
+        <button id="get_job_by_ID" class="ui blue button">Get Job by ID</button>
+        <label style="padding-right: 9cm;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </label>
+        <button id="homepage" class="ui black button" onclick="location.href='http://127.0.0.1:5000/';">Home Page</button>
+      <div class="ui modal" id="postjob">
+        <i class="close icon"></i>
+        <div class="header">
+          Add a Posting
+        </div>
+        <div class="content">
+          <div class="ui form">
+            <div class="field">
+            <label>Job ID</label>
+            <textarea id="job_id" rows=1 cols=1></textarea>
+            </div>
+
+            <div class="field">
+            <label>Posted By</label>
+            <textarea id="posted_by" rows=1 cols=1></textarea>
+            </div>
+
+            <div class="field">
+            <label>Job Type</label>
+            <textarea id="job_type" rows=1 cols=1></textarea>
+            </div>
+
+            <div class="field">
+            <label>Company</label>
+            <textarea id="company" rows=1 cols=1></textarea>
+            </div>
+
+            <div class="field">
+            <label>Job Location</label>
+            <textarea id="job_location" rows=1 cols=1></textarea>
+            </div>
+
+            <div class="field">
+            <label>Is Active?</label></div>
+              <!-- <label></label> -->
+            <!-- <div class="ui dropdown">
+              <input type="hidden" name="gender">
+              <i class="dropdown icon"></i>
+              <div class="default text">Gender</div>
+              <div class="menu">
+                <option>Male</option>
+                <option>Female</option>
+              </div>
+            </div> -->
+            <select class="ui fluid selection dropdown" id="iad">
+              <!-- <input type="hidden" name="gender"> -->
+              <!-- <div class="default text">""</div> -->
+                <!-- <option class="item" data-value="1">Yes</option>
+                <option class="item" data-value="0">No</option> -->
+                <!-- </div> -->
+                <!-- <option selected="selected"></option> -->
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+         
+
+            <label>&nbsp;</label>
+
+            <!-- <div class="field">
+            <label>Is Active ?</label>
+            <textarea id="is_active" rows=1 cols=1></textarea>
+            <label>&nbsp;</label>
+            </div> -->
+          <!-- </div>
+        </div> -->
+            <div class="actions">
+              <button class="ui blue button" id="post">  
+            
+              Post
+              <label>&nbsp;</label>
+            <i class="plus icon" ></i></button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <table class="ui celled black table" id="Job Posting Table">
+        <thead style="color:black;text-align:center;">
+          <style>
+            /* .row{
+             background-color:aquamarine;
+             -webkit-print-color-adjust: exact; 
+             } */
+           </style>
+          <tr>
+            <th class="headings">Job ID</th>
+            <th><h5 class="ui header">Posted by</h5></th>
+            <th><h5 class="ui header">Job Type</h5></th>
+            <th><h5 class="ui header">Company</h5></th>
+            <th><h5 class="ui header">Job Location</h5></th>
+            <th><h5 class="ui header">Is Active ?</h5></th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {% for entry in data %}
+          <tr>
+            <td style="color:black;text-align:center;">{{ entry.Job_ID }}</td>
+            <td style="color:black;text-align:center;">{{ entry.Posted_by }}</td>
+            <td style="color:black;text-align:center;">{{ entry.Job_Type }}</td>
+            <td style="color:black;text-align:center;">{{ entry.Company }}</td>
+            <td style="color:black;text-align:center;">{{ entry.Job_Location }}</td>
+            <td style="color:black;text-align:center;">{{ entry.Is_Active }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+     
+      <div class="ui modal" id="enterid">
+        <i class="close icon"></i>
+        <div class="header">
+          Enter Job ID
+        </div>
+        <div class="content">
+          <div class="ui form">
+            <div class="field">
+            <label>Job ID</label>
+            <textarea id="search_id" rows=1 cols=1></textarea>
+            <label>&nbsp;</label>
+            </div>
+          </div>
+
+            <div class="actions">              
+                
+              <button class="ui blue button" id="enter" >  
+            
+
+              Enter
+           </button>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="ui modal" id="deletejob">
+        <i class="close icon"></i>
+        <div class="header">
+          Enter Job ID to delete
+        </div>
+        <div class="content">
+          <div class="ui form">
+            <div class="field">
+            <label>Job ID</label>
+            <textarea id="delete_id" rows=1 cols=1></textarea>
+            <label>&nbsp;</label>
+            
+            </div>
+          </div>
+
+            <div class="actions">
+              <button class="ui red button" id="delete">  
+            
+              Delete Job Post
+           </button>
+
+          </div>
+        </div>
+      </div>
+
+
+    <script>
+      if(location.pathname=='/recruiter'){
+            $("Table").hide()
+          }
+          else{
+          $("Table").show()}
+        $(document).ready(function() {
+          // alert(location.pathname)
+          
+         
+          $("#view_jobs_list").click(function() {
+            
+            // var x = document.getElementById("Job Posting Table");
+            
+            window.location.href='http://127.0.0.1:5000/recruiter/jobs'
+            // $("Table").show()
+           
+          })
+                      
+        $("#add_job_post").click(function() {
+        $("#postjob").modal('show')}); 
+
+        $("#post").click(function() {
+
+          var id = $("#job_id").val();
+          var pb = $("#posted_by").val();
+          var jt = $("#job_type").val();
+          var jl = $("#job_location").val();
+          var co = $("#company").val()
+          var ia = $('#iad').dropdown('get text');
+
+          $.ajax({
+              url: 'http://127.0.0.1:5000/recruiter/jobs',
+              type: 'post',
+              contentType: 'application/json',
+              data:JSON.stringify({"Job_ID":id,"Posted_by":pb,"Job_Type":jt,"Job_Location":jl,"Is_Active":ia,"Company":co}) ,
+              dataType: 'json',
+              success: function(){alert('Your job post has been added sucessfully!');},
+              error: function(xhr,textStatus,err) 
+          {
+          console.log("readyState: " + xhr.readyState);
+          console.log("responseText: "+ xhr.responseText);
+          console.log("status: " + xhr.status);
+          console.log("text status: " + textStatus);
+          console.log("error: " + err);
+          }
+            });
+          // alert($('#iad').dropdown('get text'));
+          // alert($("#is_active").text());
+          $('#postjob').modal('hide');
+          location.reload();
+          window.location.href='http://127.0.0.1:5000/recruiter/jobs'
+          });
+          
+          $("#get_job_by_ID").click(function() {
+        $("#enterid").modal('show')}); 
+        
+        $("#enter").click(function() {
+
+          var id = String($("#search_id").val());
+          var loc = 'http://127.0.0.1:5000/recruiter/job/'+id;
+          window.location.href=loc;
+        })
+
+
+        $("#delete_job_post").click(function() {
+        $("#deletejob").modal('show')}); 
+        
+        $("#delete").click(function() {
+
+
+          $.ajax({
+              url: 'http://127.0.0.1:5000/recruiter/jobs/' + $("#delete_id").val(),
+              type: 'delete',
+              success: function(){alert('success');},
+              error: function(xhr,textStatus,err) 
+          {
+          console.log("readyState: " + xhr.readyState);
+          console.log("responseText: "+ xhr.responseText);
+          console.log("status: " + xhr.status);
+          console.log("text status: " + textStatus);
+          console.log("error: " + err);
+          }
+            })
+
+              $('#deletejob').modal('hide');
+              location.reload();
+              window.location.href='http://127.0.0.1:5000/recruiter/jobs'
+          // //     window.location.href= 'http://127.0.0.1:8000/jobs/' + $("#delete_id").val();
+          // var delid = String($("#delete_id").val());
+          // var loc = 'http://127.0.0.1:8000/jobs/'+delid;
+          // window.location.href=loc;
+        })
+
+
+
+
+        // $("#view_jobs_list").api({action:'http://127.0.0.1:8000/jobs',type:'get'})
+
+          /*<form action="http://127.0.0.1:8000/jobs" method="get">
+            </form>
+         /*  $.ajax({
+              url: 'home.html',
+              type: 'get',
+              data:{},
+              success: function(){alert('success');},
+              error: function(xhr,textStatus,err)
+              {
+                console.log("readyState: " + xhr.readyState);
+                console.log("responseText: "+ xhr.responseText);
+                console.log("status: " + xhr.status);
+                console.log("text status: " + textStatus);
+                console.log("error: " + err);
+              }
+              }); */ 
+
+               
+            
+          });
+        
+</script>
+
+
+
+
+
+
+</div>
+</body>
+
+
+
+</html>
