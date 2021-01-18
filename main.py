@@ -23,7 +23,7 @@ def homepage(request:Request):
 
 @job.get("/recruiter")                                                     # GET request using FastAPI --> lands on Recruiter page  
 def recpage(request:Request):                                              # Recruiter login is hardcoded (So used a button instead)
-        return templates.TemplateResponse("home.html",{
+        return templates.TemplateResponse("Home.html",{
         "request":request})
 
 
@@ -71,14 +71,14 @@ async def can_job(request: Request, db: Session = Depends(get_db)):
 async def job_dataid(request: Request, ID: int, 
 db: Session = Depends(get_db)):
     data = db.query(Jobs).filter(Jobs.Job_ID == ID).all()
-    return templates.TemplateResponse("home.html",{
+    return templates.TemplateResponse("Home.html",{
         "request":request,"data":data})    
 
 
 @job.get("/recruiter/jobs")                                                     # GET request to view all job posts        
 async def job_data(request: Request, db: Session = Depends(get_db)):
     data = db.query(Jobs).all()
-    return templates.TemplateResponse("home.html",{
+    return templates.TemplateResponse("Home.html",{
         "request":request,"data":data}) 
 
 
