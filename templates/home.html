@@ -1,29 +1,41 @@
+                                  <!-- HTML file for Recuiter Portal-->
+
+ <!-- The recruiter portal page which has resources for recuiter actions-->                                 
+
 <html>
     <head>
       <label>&nbsp;</label>
-      <center><h1 style="font-size:50px;">Recruiter Portal<label>&nbsp;</label><i class="med search plus icon"></i></h1></center> 
+      <center><h1 style="font-size:50px;">Recruiter Portal<label>&nbsp;         
+
+      </label><i class="med search plus icon"></i></h1></center> 
       
       <label>&nbsp;</label> 
       <label>&nbsp;</label> 
       <label>&nbsp;</label> <label>&nbsp;</label>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-        <!-- <link rel="stylesheet" href="C:\Users\srira\Downloads\pythonProject\templates\home.css"> -->
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" 
+        href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+        
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     </head>
     
     <body>
       <div class="ui container">
         
-        <button id="add_job_post" class="ui blue button">Add Job Post</button>
+        <!-- Buttons to add, delete and view job posts. In addition, a Home Page button -->
+
+        <button id="add_job_post" class="ui blue button">Add Job Post</button>       
         <button id="delete_job_post" class="ui blue button">Delete Job Post</button>
         <button id="view_jobs_list" class="ui blue button">View Jobs List</button>
         <button id="get_job_by_ID" class="ui blue button">Get Job by ID</button>
-        <label style="padding-right: 9cm;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label style="padding-right: 9cm;">
         </label>
-        <button id="homepage" class="ui black button" onclick="location.href='http://127.0.0.1:5000/';">Home Page</button>
+        <button id="homepage" class="ui black button" 
+        onclick="location.href='http://127.0.0.1:8000/';">Home Page</button>
+
+        <!-- UI modal form to add a job post-->
+
       <div class="ui modal" id="postjob">
         <i class="close icon"></i>
         <div class="header">
@@ -41,9 +53,16 @@
             <textarea id="posted_by" rows=1 cols=1></textarea>
             </div>
 
+           <!--This field uses a UI drop down with 3 options-->
+            
             <div class="field">
             <label>Job Type</label>
-            <textarea id="job_type" rows=1 cols=1></textarea>
+            <select class="ui search dropdown" id="jty">
+              <label>""</label>
+              <option value="2">Permanent</option>
+              <option value="1">Temporary</option>
+              <option value="0">On Contract</option>
+            </select>
             </div>
 
             <div class="field">
@@ -56,40 +75,24 @@
             <textarea id="job_location" rows=1 cols=1></textarea>
             </div>
 
+            <!--UI dropdown-->
+
             <div class="field">
-            <label>Is Active?</label></div>
-              <!-- <label></label> -->
-            <!-- <div class="ui dropdown">
-              <input type="hidden" name="gender">
-              <i class="dropdown icon"></i>
-              <div class="default text">Gender</div>
-              <div class="menu">
-                <option>Male</option>
-                <option>Female</option>
-              </div>
-            </div> -->
-            <select class="ui fluid selection dropdown" id="iad">
-              <!-- <input type="hidden" name="gender"> -->
-              <!-- <div class="default text">""</div> -->
-                <!-- <option class="item" data-value="1">Yes</option>
-                <option class="item" data-value="0">No</option> -->
-                <!-- </div> -->
-                <!-- <option selected="selected"></option> -->
-              <option value="1">Yes</option>
-              <option value="0">No</option>
+            <label>Immediate Joining ?</label>
+              
+            <select class="ui search dropdown" id="iad">
+              <div class="text">""</div>
+              <option value="1"> Yes</option>
+              <option value="0"> No</option>
             </select>
-         
 
+            
             <label>&nbsp;</label>
-
-            <!-- <div class="field">
-            <label>Is Active ?</label>
-            <textarea id="is_active" rows=1 cols=1></textarea>
-            <label>&nbsp;</label>
-            </div> -->
-          <!-- </div>
-        </div> -->
+            
+           
             <div class="actions">
+              <label style="padding-right: 19cm;">&nbsp;
+              </label>
               <button class="ui blue button" id="post">  
             
               Post
@@ -100,14 +103,11 @@
         </div>
       </div>
     </div>
-
+  </div>
       <table class="ui celled black table" id="Job Posting Table">
-        <thead style="color:black;text-align:center;">
+        <thead style="color:black;text-align:center;">         <!--Adding colour to the UI table-->
           <style>
-            /* .row{
-             background-color:aquamarine;
-             -webkit-print-color-adjust: exact; 
-             } */
+           
            </style>
           <tr>
             <th class="headings">Job ID</th>
@@ -115,11 +115,11 @@
             <th><h5 class="ui header">Job Type</h5></th>
             <th><h5 class="ui header">Company</h5></th>
             <th><h5 class="ui header">Job Location</h5></th>
-            <th><h5 class="ui header">Is Active ?</h5></th>
+            <th><h5 class="ui header">Immediate Joining?</h5></th>
             
           </tr>
         </thead>
-        <tbody>
+        <tbody>         <!--For loop to add elements from JSON data-->
           {% for entry in data %}
           <tr>
             <td style="color:black;text-align:center;">{{ entry.Job_ID }}</td>
@@ -127,7 +127,7 @@
             <td style="color:black;text-align:center;">{{ entry.Job_Type }}</td>
             <td style="color:black;text-align:center;">{{ entry.Company }}</td>
             <td style="color:black;text-align:center;">{{ entry.Job_Location }}</td>
-            <td style="color:black;text-align:center;">{{ entry.Is_Active }}</td>
+            <td style="color:black;text-align:center;">{{ entry.Immediate_Joining }}</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -158,6 +158,7 @@
         </div>
       </div>
 
+      <!--UI Modal form to delete a job post-->
 
       <div class="ui modal" id="deletejob">
         <i class="close icon"></i>
@@ -184,7 +185,10 @@
         </div>
       </div>
 
-
+<!--Script Begins.. 
+The table is to kept hidden in the recruiter page
+This is inferred from the pathname '/recruiter'. Otherwise it should be visible 
+-->
     <script>
       if(location.pathname=='/recruiter'){
             $("Table").hide()
@@ -192,18 +196,14 @@
           else{
           $("Table").show()}
         $(document).ready(function() {
-          // alert(location.pathname)
-          
+         
+   // 'View Jobs List' button will populate jobs list     
          
           $("#view_jobs_list").click(function() {
-            
-            // var x = document.getElementById("Job Posting Table");
-            
-            window.location.href='http://127.0.0.1:5000/recruiter/jobs'
-            // $("Table").show()
-           
-          })
-                      
+            window.location.href='http://127.0.0.1:8000/recruiter/jobs'
+            })
+     
+    // Function to add a job post to database        
         $("#add_job_post").click(function() {
         $("#postjob").modal('show')}); 
 
@@ -211,16 +211,18 @@
 
           var id = $("#job_id").val();
           var pb = $("#posted_by").val();
-          var jt = $("#job_type").val();
+          var jt = $("#jty").dropdown('get text');
           var jl = $("#job_location").val();
           var co = $("#company").val()
           var ia = $('#iad').dropdown('get text');
 
+    // Ajax POST used to add JSON data to database
           $.ajax({
-              url: 'http://127.0.0.1:5000/recruiter/jobs',
+              url: 'http://127.0.0.1:8000/recruiter/jobs',
               type: 'post',
               contentType: 'application/json',
-              data:JSON.stringify({"Job_ID":id,"Posted_by":pb,"Job_Type":jt,"Job_Location":jl,"Is_Active":ia,"Company":co}) ,
+              data:JSON.stringify({"Job_ID":id,"Posted_by":pb,
+              "Job_Type":jt,"Job_Location":jl,"Immediate_Joining":ia,"Company":co}) ,
               dataType: 'json',
               success: function(){alert('Your job post has been added sucessfully!');},
               error: function(xhr,textStatus,err) 
@@ -232,34 +234,38 @@
           console.log("error: " + err);
           }
             });
-          // alert($('#iad').dropdown('get text'));
-          // alert($("#is_active").text());
+          
           $('#postjob').modal('hide');
           location.reload();
-          window.location.href='http://127.0.0.1:5000/recruiter/jobs'
+          window.location.href='http://127.0.0.1:8000/recruiter/jobs'
           });
+    // Fuction to get a job post by Job ID
           
           $("#get_job_by_ID").click(function() {
         $("#enterid").modal('show')}); 
         
         $("#enter").click(function() {
 
-          var id = String($("#search_id").val());
-          var loc = 'http://127.0.0.1:5000/recruiter/job/'+id;
+          var id = String($("#search_id").val());                     // storing the serach ID to a variable and using it in the 
+          var loc = 'http://127.0.0.1:8000/recruiter/job/'+id;        // respective URL
           window.location.href=loc;
         })
 
+    // Function to delete a job post 
 
         $("#delete_job_post").click(function() {
         $("#deletejob").modal('show')}); 
         
         $("#delete").click(function() {
 
-
+    // Ajax DELETE request. Uses the ID provided to complete the URL and delete data from job database
           $.ajax({
-              url: 'http://127.0.0.1:5000/recruiter/jobs/' + $("#delete_id").val(),
+              url: 'http://127.0.0.1:8000/recruiter/jobs/' + $("#delete_id").val(),
               type: 'delete',
-              success: function(){alert('success');},
+
+      // Alert to message to inform user that the post has been removed
+
+              success: function(){alert('Job post has been removed');}, 
               error: function(xhr,textStatus,err) 
           {
           console.log("readyState: " + xhr.readyState);
@@ -272,49 +278,12 @@
 
               $('#deletejob').modal('hide');
               location.reload();
-              window.location.href='http://127.0.0.1:5000/recruiter/jobs'
-          // //     window.location.href= 'http://127.0.0.1:8000/jobs/' + $("#delete_id").val();
-          // var delid = String($("#delete_id").val());
-          // var loc = 'http://127.0.0.1:8000/jobs/'+delid;
-          // window.location.href=loc;
-        })
-
-
-
-
-        // $("#view_jobs_list").api({action:'http://127.0.0.1:8000/jobs',type:'get'})
-
-          /*<form action="http://127.0.0.1:8000/jobs" method="get">
-            </form>
-         /*  $.ajax({
-              url: 'home.html',
-              type: 'get',
-              data:{},
-              success: function(){alert('success');},
-              error: function(xhr,textStatus,err)
-              {
-                console.log("readyState: " + xhr.readyState);
-                console.log("responseText: "+ xhr.responseText);
-                console.log("status: " + xhr.status);
-                console.log("text status: " + textStatus);
-                console.log("error: " + err);
-              }
-              }); */ 
-
-               
-            
+              window.location.href='http://127.0.0.1:8000/recruiter/jobs'
+         
+        })  
           });
         
 </script>
-
-
-
-
-
-
 </div>
 </body>
-
-
-
 </html>

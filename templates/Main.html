@@ -1,12 +1,21 @@
+                                            <!--Career Portal HTML file-->
+                                            
+<!-- This file is the starting HTML page where we can choose to go to the recruiter page or candidate page-->
+
 <html>
     <label>&nbsp;</label>
        
     <head>
         
-        <center><i class="massive users icon" ></i></center>
+        <center><i class="massive users icon" ></i></center>                        <!--Icons -->
         <center><h1 style="font-size:60px;">Career Portal</h1></center> 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+
+    <!-- linking the associated css sheets and javascript files needed to add tables, buttons, icons, layout etc.
+         Used Semantic UI css sheets for this. Jquery javascript files have also been included-->
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">    
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js" 
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     </head>
     <label>&nbsp;</label>
@@ -15,12 +24,16 @@
     <label>&nbsp;</label>
     <label>&nbsp;</label>
 
-    <center>   <div class="massive blue ui buttons"></center>
-        <center> <button class="massive blue ui button" onclick="location.href='http://127.0.0.1:5000/recruiter';">Recruiter</button></center>
+    <!--Buttons for Recruiter and Candidate separately (They are hard coded). Clicking on them takes us to relevent sites -->
+
+    <center>   <div class="massive blue ui buttons"></center>                                   
+        <center> <button class="massive blue ui button"                                          
+             onclick="location.href='http://127.0.0.1:8000/recruiter';">Recruiter</button></center>    
         <label>&nbsp;</label>
         <label>&nbsp;</label>
         <label>&nbsp;</label>
-            <center><button class="massive blue ui button" onclick="location.href='http://127.0.0.1:5000/candidate';">Candidate</button></center>
+            <center><button class="massive blue ui button" 
+                onclick="location.href='http://127.0.0.1:8000/candidate';">Candidate</button></center>
       </div>
 
 

@@ -1,24 +1,34 @@
+                                    <!--HTML file for Applicant Portal-->
+                                    
+<!-- This file is used to load and present all related tables and resources for candidates-->
+
 <html>
     <head>
       <label>&nbsp;</label>
-      <center><h1 style="font-size:50px;">Applicant Portal<label>&nbsp;&nbsp;</label><i class="med user circle icon" ></i></h1></center> 
+      <center><h1 style="font-size:50px;">Applicant Portal<label>&nbsp;&nbsp;</label>       
+        <i class="med user circle icon" ></i></h1></center> 
      
       <label>&nbsp;</label> 
       <label>&nbsp;</label> 
       <label>&nbsp;</label> <label>&nbsp;</label>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js" 
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     </head>
 
     <body>
         <div class="ui container">
             
-            <label style="padding-right: 25cm;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
-               
-        <button id="homepage" class="ui button secondary" onclick="location.href='http://127.0.0.1:5000/';">Home Page</button>
+            <label style="padding-right: 25cm;">&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+
+               <!--Home Page button takes us to Main Page-->
+        
+        <button id="homepage" class="ui button secondary"                         
+        onclick="location.href='http://127.0.0.1:8000/';">Home Page</button>
           
-    <!-- <button id="view_jobs_list" class="ui button secondary">View Jobs List</button> -->
+      <!-- Creating a Semantic UI table to list jobs This will be populated on reaching this page-->
 
     <table class="ui celled black table" id="Job Posting Table">
         <label>&nbsp;</label>
@@ -26,10 +36,7 @@
         <label>&nbsp;</label>
         <thead style="text-align:center;">
           <style>
-            /* .row{
-             background-color:aquamarine;
-             -webkit-print-color-adjust: exact; 
-             } */
+            
            </style>
           <tr>
             <th class="headings">Job ID</th>
@@ -37,12 +44,14 @@
             <th><h5 class="ui header">Job Type</h5></th>
             <th><h5 class="ui header">Company</h5></th>
             <th><h5 class="ui header">Job Location</h5></th>
-            <th><h5 class="ui header">Is Active ?</h5></th>
+            <th><h5 class="ui header">Immediate Joining?</h5></th>
             <th><h5 class="ui header"></h5></th>
           </tr>
         </thead>
         <tbody>
             
+          <!-- For loop to add rows from JSON data -->
+
           {% for entry in data %}
           
           <tr>
@@ -51,12 +60,16 @@
             <td style="text-align:center;">{{ entry.Job_Type }}</td>
             <td style="text-align:center;">{{ entry.Company }}</td>
             <td style="text-align:center;">{{ entry.Job_Location }}</td>
-            <td style="text-align:center;">{{ entry.Is_Active }}</td>
-            <td style="text-align:center;"> <button class="right ui primary button"; onclick="appfunc({{entry.Job_ID}})";>Apply</button></td>
-          </tr>
+            <td style="text-align:center;">{{ entry.Immediate_Joining }}</td>
+            <td style="text-align:center;"> <button 
+              class="right ui primary button"; 
+              onclick="appfunc({{entry.Job_ID}})";>Apply</button></td> <!-- Function appfunc will open a UI form when 'Apply' is clicked-->
+          </tr>                                                           
           {% endfor %}
         </tbody>
       </table>
+
+      <!--UI Modal form that opens on clicking 'Apply'. Candidate fills in details and submits the form-->
        
       <div class="ui modal" id="applyjob">
         <i class="close icon"></i>
@@ -65,11 +78,7 @@
         </div>
         <div class="content">
           <div class="ui form">
-            <div class="field">
-            <label>Candidate ID</label>
-            <textarea id="cand_id" rows=1 cols=1></textarea>
-            </div>
-
+            
             <div class="field">
             <label>First Name</label>
             <textarea id="fname" rows=1 cols=1></textarea>
@@ -81,18 +90,25 @@
             </div>
 
             <div class="field">
+            <label>Qualification</label>
+            <textarea id="qual" rows=1 cols=1></textarea>
+            </div>
+
+            <div class="field">
             <label>Ph No</label>
             <textarea id="phno" rows=1 cols=1></textarea>
             </div>
 
             <div class="field">
-            <label>Experience</label>
+            <label>Experience in years</label>
             <textarea id="experience" rows=1 cols=1></textarea>
             </div>
             
             <label>&nbsp;</label>
 
             <div class="actions">
+              <label style="padding-right: 19cm;">&nbsp;
+              </label>
               <button class="ui blue button" id="apply">  
             
               Apply
@@ -104,30 +120,33 @@
         </div>
         </div>
       
-      <script>
+<!-- Beginning of scripts-->
 
-            // $(document).ready(function() {
-                // alert(document.getElementById ( "jobid" ).innerText)
-
+      <script> 
+        // appfunc uses job ID variable jid to create a Fast API POST request and add an aplication to the database
                function appfunc(jid){
                     
                     $("#applyjob").modal('show');
                     $("#apply").click(function(){
-                        // alert($("#entry.Job_ID").id)
                         
-                        var ci = $("#cand_id").val();
+                        
+                        var qu = $("#qual").val();
                         var fn = $("#fname").val();
                         var ln = $("#lname").val();
                         var pn = $("#phno").val();
                         var ex = $("#experience").val();
-
-          $.ajax({
-              url: 'http://127.0.0.1:5000/candidate/job/' + jid + '/apply',
+//  Ajax is used here for the post request
+          $.ajax({                                                                  
+              url: 'http://127.0.0.1:8000/candidate/job/' + jid + '/apply',
               type: 'post',
               contentType: 'application/json',
-              data:JSON.stringify({"Job_ID":jid,"Cand_ID":ci,"First_Name":fn,"Last_Name":ln,"Ph_no":pn,"Experience":ex}) ,
+              data:JSON.stringify({"Job_ID":jid,
+              "Qualification":qu,"First_Name":fn,"Last_Name":ln,"Ph_no":pn,"Experience_years":ex}) ,
               dataType: 'json',
-              success: function(){alert('Your application has been posted sucessfully!');},
+
+              // Alert message when application posting is a success
+              
+              success: function(){alert('Your application has been posted sucessfully!');}, 
               error: function(xhr,textStatus,err) 
           {
           console.log("readyState: " + xhr.readyState);
@@ -139,19 +158,11 @@
             });
 
           $('#applyjob').modal('hide');
-          location.reload();
-          window.location.href='http://127.0.0.1:5000/candidate'
+          location.reload();                                       // Code to reload the page and move to the given URL
+          window.location.href='http://127.0.0.1:8000/candidate'
           });
 
 
         }      
-
-
-                // });
-
-                // window.location.href='http://127.0.0.1:8000/candidate'
-           
             </script>
-
-
 </html>

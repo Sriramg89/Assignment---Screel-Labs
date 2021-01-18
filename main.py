@@ -1,90 +1,94 @@
+            # Main Python script where Fast API is used to make requests from database ( Using SQLite database ) 
+
+# Importing  necessary Python modules like fastapi,pydantic,sqlalchemy etc.
+
 from fastapi import FastAPI, Depends, Request
-import Model
-from Database import SessionLocal_jobs,SessionLocal_apps, engine_jobs,engine_apps
-from pydantic import BaseModel
+from sqlalchemy.sql.expression import null, select,join,outerjoin  # sqlalchemy is used to send SQL requests to databases 
+import Model                                                       # and also helps in ORM mapping
+from Database import SessionLocal, engine
+from pydantic import BaseModel                                   # Pydantic is used to ceate objects called BaseModels (commonly used)
 from Model import Jobs, Candidate, Application
 from sqlalchemy.orm import Session
 from fastapi.templating import Jinja2Templates
 
 
-job = FastAPI()
+job = FastAPI()                                                           
 
-templates=Jinja2Templates(directory="templates")
+templates=Jinja2Templates(directory="templates")                                  
 
-@job.get("/")
+@job.get("/")                                                              # GET request using FastAPI --> lands on Career homepage
 def homepage(request:Request):
         return templates.TemplateResponse("Main.html",{
         "request":request})
 
-@job.get("/recruiter")
-def recpage(request:Request):
+@job.get("/recruiter")                                                     # GET request using FastAPI --> lands on Recruiter page  
+def recpage(request:Request):                                              # Recruiter login is hardcoded (So used a button instead)
         return templates.TemplateResponse("home.html",{
         "request":request})
 
 
 
-Model.Base.metadata.create_all(bind=engine_apps)
-Model.Base.metadata.create_all(bind=engine_jobs)
+Model.Base.metadata.create_all(bind=engine)
 
-class JobDetails(BaseModel):
-    Job_ID: int
-    Posted_by: str
+
+class JobDetails(BaseModel):                                         # Created a 'JobDetails' BaseModel class specifying members and types.
+    Job_ID: int                                                             
+    Posted_by: str                                                          
     Job_Type: str
     Company: str
     Job_Location: str
-    Is_Active: str
+    Immediate_Joining: str
 
 
-class ApplicationData(BaseModel):
-    Cand_ID: int
+class ApplicationData(BaseModel):                                      # Created an Application data class specifying members     
+                                                                       # and types.
     Job_ID: int
     First_Name: str
-    Last_Name:str
-    Ph_no:int
-    Experience:int
+    Last_Name: str
+    Qualification: str
+    Ph_no: int
+    Experience_years: int
 
 
-def get_dbjobs():
+def get_db():                                                           # Function to create an instance of the database
     try:
-        db = SessionLocal_jobs()
-        yield db
-    finally:
-        db.close()
-
-def get_dbapps():
-    try:
-        db = SessionLocal_apps()
+        db = SessionLocal()
         yield db
     finally:
         db.close()        
 
-@job.get("/candidate")
-async def can_job(request: Request, db: Session = Depends(get_dbjobs)):
-    data = db.query(Jobs).all()
+@job.get("/candidate")                                                   # GET request using FastAPI --> lands on Candidate's page
+async def can_job(request: Request, db: Session = Depends(get_db)):
+
+    data=db.query(Jobs).outerjoin(Application,
+     Jobs.Job_ID == Application.Job_ID).filter(Application.Job_ID == None)     #  Jobs that the candidate has already applied to 
+                                                                               #  will not be shown (SQL join and filter used)
     return templates.TemplateResponse("Candidate.html",{
         "request":request,"data":data}) 
 
 
-@job.get("/recruiter/job/{ID}")
-async def job_dataid(request: Request, ID: int, db: Session = Depends(get_dbjobs)):
+@job.get("/recruiter/job/{ID}")                                                # GET request to get a job post by ID
+async def job_dataid(request: Request, ID: int, 
+db: Session = Depends(get_db)):
     data = db.query(Jobs).filter(Jobs.Job_ID == ID).all()
     return templates.TemplateResponse("home.html",{
         "request":request,"data":data})    
 
 
-@job.get("/recruiter/jobs")
-async def job_data(request: Request, db: Session = Depends(get_dbjobs)):
+@job.get("/recruiter/jobs")                                                     # GET request to view all job posts        
+async def job_data(request: Request, db: Session = Depends(get_db)):
     data = db.query(Jobs).all()
     return templates.TemplateResponse("home.html",{
         "request":request,"data":data}) 
 
 
-@job.post("/recruiter/jobs")
-async def create_job(detail_request: JobDetails, db: Session = Depends(get_dbjobs)):
+@job.post("/recruiter/jobs")                                                    # POST request to add a job post.         
+async def create_job(detail_request: JobDetails,                                # It gets added to SQLite Database as well.
+db: Session = Depends(get_db)):
 
-    post = Jobs()
-    post.Job_ID = detail_request.Job_ID
-    post.Is_Active=detail_request.Is_Active
+    post = Jobs()                                                               # Creates an instance of Jobs class to help assign values
+    post.Job_ID = detail_request.Job_ID                                         # to data members
+    post.Immediate_Joining=detail_request.Immediate_Joining
     post.Posted_by=detail_request.Posted_by
     post.Company=detail_request.Company
     post.Job_Location=detail_request.Job_Location
@@ -97,8 +101,9 @@ async def create_job(detail_request: JobDetails, db: Session = Depends(get_dbjob
     }    
 
 
-@job.delete("/recruiter/jobs/{ID}")
-async def job_databyID(request: Request, ID:int, db: Session = Depends(get_dbjobs)):
+@job.delete("/recruiter/jobs/{ID}")                                             # DELETE request to remove an entry from the database  
+async def job_databyID(request: Request, ID:int,                                # based on ID provided
+db: Session = Depends(get_db)):
    
     db.query(Jobs).filter(Jobs.Job_ID == ID).delete()
     db.commit()
@@ -108,23 +113,23 @@ async def job_databyID(request: Request, ID:int, db: Session = Depends(get_dbjob
         "message": "job was deleted from the database"} 
 
 
-@job.post("/candidate/job/{ID}/apply")
-async def create_application(detail_request: ApplicationData, ID:int, db: Session = Depends(get_dbapps)):
+@job.post("/candidate/job/{ID}/apply")                                      # POST request for candidate to apply for a particular job
+async def create_application(detail_request: ApplicationData,
+ ID:int, db: Session = Depends(get_db)):
 
     application = Application()
-    # application.Appl_ID = detail_request.Appl_ID
     application.Job_ID=ID
-    application.Cand_ID = detail_request.Cand_ID
+    application.Qualification = detail_request.Qualification
     application.First_Name = detail_request.First_Name
     application.Last_Name = detail_request.Last_Name
     application.Ph_no = detail_request.Ph_no
-    application.Experience = detail_request.Experience
+    application.Experience_years = detail_request.Experience_years
 
 
-    db.add(application)
+    db.add(application)                                                     # Adding details to the database and commiting the changes
     db.commit()
 
-    return {
+    return {                                                                # Alert message to inform the user that action was sucessful
         "code": "success",
         "message": "Application has been added to the database"
     }
