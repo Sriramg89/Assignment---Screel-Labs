@@ -12,7 +12,7 @@
 
 **Main.html** : This file contains code for the starting career portal web page with options to navigate to recruiter and candidate portals. Jquery and Ajax are used to send requests to the databases. The web page is designed using Javascript, HTML and Semantic UI CSS. Semantic UI CSS and associated JQuery links are referenced.
 
-**Candidate.html** : This file conatins Javascript, HTML and Semantic UI CSS to design the candidate portal.
+**Candidate.html** : This file contains Javascript, HTML and Semantic UI CSS to design the candidate portal.
 
 **Home.html** : Recuiter portal webpage.
 
